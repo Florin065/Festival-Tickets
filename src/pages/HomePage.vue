@@ -1,5 +1,5 @@
 <template>
-  <q-page>
+  <q-page class="home-background">
     <div class="floating-bar">
       <router-link to="/">
         <img src="~/assets/BEACHPLEASE.png" alt="Logo" class="logo" />
@@ -24,102 +24,156 @@
           <div class="artist-row">
             <div class="artist">
               <img src="~assets/TRAVIS.jpg" alt="TRAVIS SCOTT" />
-              <div class="overlay">TRAVIS SCOTT</div>
             </div>
             <div class="artist">
               <img src="~assets/ANITTA.jpg" alt="ANITTA" />
-              <div class="overlay">ANITTA</div>
             </div>
             <div class="artist">
               <img src="~assets/WIZKHALIFA.png" alt="WIZ KHALIFA" />
-              <div class="overlay">WIZ KHALIFA</div>
+              <!-- <div class="overlay">WIZ KHALIFA</div> -->
             </div>
           </div>
           <div class="artist-row">
             <div class="artist">
               <img src="~assets/YEAT.png" alt="YEAT" />
-              <div class="overlay">YEAT</div>
+              <!-- <div class="overlay">YEAT</div> -->
             </div>
             <div class="artist">
               <img src="~assets/ICESPICE.jpg" alt="ICE SPICE" />
-              <div class="overlay">ICE SPICE</div>
+              <!-- <div class="overlay">ICE SPICE</div> -->
             </div>
             <div class="artist">
               <img src="~assets/DONTOLIVER.jpg" alt="DON TOLIVER" />
-              <div class="overlay">DON TOLIVER</div>
+              <!-- <div class="overlay">DON TOLIVER</div> -->
             </div>
           </div>
           <div class="artist-row">
             <div class="artist">
               <img src="~assets/NLECHOPPA.jpg" alt="NLE CHOPPA" />
-              <div class="overlay">NLE CHOPPA</div>
+              <!-- <div class="overlay">NLE CHOPPA</div> -->
             </div>
             <div class="artist">
               <img src="~assets/TRIPPIERED.jpg" alt="TRIPPIE REDD" />
-              <div class="overlay">TRIPPIE REDD</div>
+              <!-- <div class="overlay">TRIPPIE REDD</div> -->
             </div>
             <div class="artist">
               <img src="~assets/CHIEFKEEF.jpg" alt="CHIEF KEEF" />
-              <div class="overlay">CHIEF KEEF</div>
+              <!-- <div class="overlay">CHIEF KEEF</div> -->
             </div>
           </div>
           <div class="artist-row">
             <div class="artist">
               <img src="~assets/RICKROSS.jpg" alt="RICK ROSS" />
-              <div class="overlay">RICK ROSS</div>
+              <!-- <div class="overlay">RICK ROSS</div> -->
             </div>
             <div class="artist">
               <img src="~assets/6IX9INE.jpg" alt="6IX9INE" />
-              <div class="overlay">6IX9INE</div>
+              <!-- <div class="overlay">6IX9INE</div> -->
             </div>
             <div class="artist">
               <img src="~assets/GUCCIMANE.jpg" alt="GUCCI MANE" />
-              <div class="overlay">GUCCI MANE</div>
+              <!-- <div class="overlay">GUCCI MANE</div> -->
             </div>
           </div>
           <div class="artist-row">
             <div class="artist">
               <img src="~assets/LILPUMP.jpg" alt="LIL PUMP" />
-              <div class="overlay">LIL PUMP</div>
+              <!-- <div class="overlay">LIL PUMP</div> -->
             </div>
             <div class="artist">
               <img src="~assets/RICHTHEKID.jpg" alt="RICH THE KID" />
-              <div class="overlay">RICH THE KID</div>
+              <!-- <div class="overlay">RICH THE KID</div> -->
             </div>
             <div class="artist">
               <img src="~assets/CITYMORGUE.png" alt="CITY MORGUE" />
-              <div class="overlay">CITY MORGUE</div>
+              <!-- <div class="overlay">CITY MORGUE</div> -->
             </div>
           </div>
           <h2 class="section-title1">+ MANY MORE TO BE ANNOUNCED</h2>
         </div>
       </div>
-      <div class="section">
-        <h2 class="section-title">Tickets</h2>
-        <div class="bilete-gallery">
-          <div class="bilete-row">
-            <div class="bilete">
+
+      <div class="ticket-row">
+        <div
+          class="ticket-container"
+          @click="redirectToBuyTicketPage"
+          @mouseover="zoomOut"
+          @mouseleave="resetZoom"
+        >
+          <div class="ticket">
+            <img
+              src="~/assets/BEACHPLEASE.png"
+              alt="BEACHPLEASE"
+              class="ticket-image"
+            />
+            <div class="ticket-details">
+              <p class="ticket-name">General Access</p>
+              <p class="ticket-price">$199</p>
+              <p class="ticket-description">
+                The General Access pass grants you access to the festival for
+                the entire duration of the event.
+              </p>
               <router-link to="/buy">
-                <img src="~assets/General.png" class="bilet-image" />
-              </router-link>
-              <router-link to="/buy">
-                <button class="buy-now-button1">BUY NOW</button>
+                <button class="buy-now-button">BUY NOW</button>
               </router-link>
             </div>
-            <div class="bilete">
+          </div>
+        </div>
+
+        <div
+          class="ticket-container"
+          @click="redirectToBuyTicketPage"
+          @mouseover="zoomOut"
+          @mouseleave="resetZoom"
+        >
+          <div class="ticket">
+            <img
+              src="~/assets/BEACHPLEASE.png"
+              alt="BEACHPLEASE"
+              class="ticket-image"
+            />
+            <div class="ticket-details">
+              <p class="ticket-name">VIP Pass</p>
+              <p class="ticket-price">$329</p>
+              <p class="ticket-description">
+                The VIP Pass offers “skip-the-line” access to the festival area,
+                the possibility to watch the show from an elevated VIP platform,
+                the option to reserve a table, separate toilets, and private
+                bars on the VIP platform.
+              </p>
               <router-link to="/buy">
-                <img src="~assets/VIP.png" class="bilet-image" />
-              </router-link>
-              <router-link to="/buy">
-                <button class="buy-now-button2">BUY NOW</button>
+                <button class="buy-now-button">BUY NOW</button>
               </router-link>
             </div>
-            <div class="bilete">
+          </div>
+        </div>
+
+        <div
+          class="ticket-container"
+          @click="redirectToBuyTicketPage"
+          @mouseover="zoomOut"
+          @mouseleave="resetZoom"
+        >
+          <div class="ticket">
+            <img
+              src="~/assets/BEACHPLEASE.png"
+              alt="BEACHPLEASE"
+              class="ticket-image"
+            />
+            <div class="ticket-details">
+              <p class="ticket-name">Backstage Lounge Pass</p>
+              <p class="ticket-price">$399</p>
+              <p class="ticket-description">
+                The “Backstage Lounge” Pass offers ultra-fast lane access (the
+                quickest access lane in the festival) and the possibility to
+                watch the Main Stage show from the artist-dedicated lounge,
+                alongside your favorite stars! The lounge is an elevated
+                platform with the best view towards the Main Stage, with private
+                bars and dedicated toilets. The pass also offers the option to
+                reserve a table in the Lounge.
+              </p>
               <router-link to="/buy">
-                <img src="~assets/Lounge.png" class="bilet-image" />
-              </router-link>
-              <router-link to="/buy">
-                <button class="buy-now-button3">BUY NOW</button>
+                <button class="buy-now-button">BUY NOW</button>
               </router-link>
             </div>
           </div>
@@ -143,16 +197,50 @@
 <script>
 export default {
   name: 'HomePage',
+  methods: {
+    redirectToBuyTicketPage() {
+      this.$router.push('/buy');
+    },
+    zoomOut(event) {
+      event.currentTarget.style.transform = 'scale(1.05)';
+    },
+    resetZoom(event) {
+      event.currentTarget.style.transform = 'scale(1)';
+    },
+  },
 };
 </script>
 
 <style scoped>
+.home-background {
+  background: linear-gradient(
+    135deg,
+    #ff6f61,
+    #e53170,
+    #833ab4,
+    #3a86ff,
+    #70e9ff,
+    #ffd53e
+  );
+  background-size: 1200% 1200%;
+  animation: gradientBG 20s ease infinite;
+}
+
+@keyframes gradientBG {
+  0% {
+    background-position: 0% 50%;
+  }
+  50% {
+    background-position: 100% 50%;
+  }
+  100% {
+    background-position: 0% 50%;
+  }
+}
+
 .floating-bar {
   position: fixed;
-  top: 0;
-  left: 0;
   width: 100%;
-  background-color: rgba(255, 255, 255, 0.8);
   box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
   padding: 10px 20px;
   display: flex;
@@ -234,32 +322,11 @@ export default {
   border-radius: 10px;
 }
 
-.bilete-gallery {
-  display: grid;
-  gap: 20px;
-}
-
-.bilete-row {
-  display: flex;
-  justify-content: center;
-}
-
-.bilet-image {
-  max-width: 80%;
-  height: auto;
-  border-radius: 10px;
-  transition: transform 0.3s ease;
-}
-
-.bilet-image:hover {
-  transform: scale(1.05);
-}
-
 .buy-now-button1 {
   background-color: rgb(154, 221, 54);
   border: none;
   font-weight: 700;
-  padding: 7px 86px; /* Ajustează dimensiunea butonului */
+  padding: 7px 86px;
   text-align: center;
   text-decoration: none;
   display: inline-block;
@@ -267,7 +334,7 @@ export default {
   font-family: 'Roboto', sans-serif;
   transition-duration: 0.4s;
   cursor: pointer;
-  border-radius: 0px; /* Face butonul dreptunghiular */
+  border-radius: 0px;
   position: absolute;
   bottom: 179px;
   left: 22.75%;
@@ -277,7 +344,7 @@ export default {
   background-color: rgb(154, 221, 54);
   border: none;
   font-weight: 700;
-  padding: 7px 86px; /* Ajustează dimensiunea butonului */
+  padding: 7px 86px;
   text-align: center;
   text-decoration: none;
   display: inline-block;
@@ -285,51 +352,79 @@ export default {
   font-family: 'Roboto', sans-serif;
   transition-duration: 0.4s;
   cursor: pointer;
-  border-radius: 0px; /* Face butonul dreptunghiular */
+  border-radius: 0px;
   position: absolute;
   bottom: 145px;
   left: 41.6%;
 }
 
-.buy-now-button3 {
+.ticket-row {
+  display: flex;
+  justify-content: center;
+  gap: 40px;
+}
+
+.ticket-container {
+  display: flex;
+  justify-content: space-between;
+  margin-top: 20px;
+  max-width: 15%;
+}
+
+.ticket {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  padding: 10px;
+  border: 2px solid #ddd;
+  border-radius: 10px;
+}
+
+.ticket-image {
+  max-width: 80px;
+}
+
+.ticket-details {
+  margin-top: 10px;
+  text-align: center;
+}
+
+.ticket-name {
+  font-size: 35px;
+  font-weight: bold;
+}
+
+.ticket-price {
+  font-size: 16px;
+  font-weight: bold;
+}
+
+.ticket-description {
+  font-size: 14px;
+  margin-top: 5px;
+}
+
+.buy-now-button {
   background-color: rgb(154, 221, 54);
   border: none;
   font-weight: 700;
-  padding: 7px 86px; /* Ajustează dimensiunea butonului */
+  padding: 5px 10px;
   text-align: center;
   text-decoration: none;
   display: inline-block;
-  font-size: 16px;
+  font-size: 14px;
   font-family: 'Roboto', sans-serif;
   transition-duration: 0.4s;
   cursor: pointer;
-  border-radius: 0px; /* Face butonul dreptunghiular */
-  position: absolute;
-  bottom: 52.5px;
-  left: 60.5%;
+  border-radius: 25px;
+  margin-top: 10px;
 }
 
-.buy-now-button1:hover {
+.buy-now-button:hover {
   background-color: #45a049;
 }
 
-.buy-now-button1:active {
-  background-color: #3e8e41;
-}
-
-.buy-now-button2:hover {
-  background-color: #45a049;
-}
-
-.buy-now-button2:active {
-  background-color: #3e8e41;
-}
-
-.buy-now-button3:hover {
-  background-color: #45a049;
-}
-
-.buy-now-button3:active {
+.buy-now-button:active {
   background-color: #3e8e41;
 }
 
@@ -338,8 +433,8 @@ export default {
   bottom: 20px;
   left: 20px;
   border-radius: 12px;
-  overflow: hidden; /* Asigură că conținutul iframe este tăiat în cazul în care depășește containerul */
-  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1); /* Adaugă o umbră sub container */
+  overflow: hidden;
+  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
 }
 
 .overlay {
