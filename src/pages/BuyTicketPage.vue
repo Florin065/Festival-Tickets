@@ -63,15 +63,28 @@
             />
 
             <label for="email">Email:</label>
-            <input type="email" id="email" v-model="formData.email" required />
+            <input
+              type="email"
+              id="email"
+              v-model="formData.email"
+              @input="validateEmail"
+              required
+            />
+            <span v-if="!isEmailValid" style="color: red"
+              >Email already exists.</span
+            >
 
             <label for="phone_number">Phone number:</label>
             <input
               type="text"
               id="phone_number"
               v-model="formData.phone_number"
+              @input="validatePhoneNumber"
               required
             />
+            <span v-if="!isPhoneValid" style="color: red"
+              >Phone number already exists.</span
+            >
 
             <div class="button-group">
               <button type="submit">Submit</button>
@@ -85,6 +98,9 @@
 </template>
 
 <script>
+import { db } from '../firebase';
+import { collection, addDoc, query, where, getDocs } from 'firebase/firestore';
+
 export default {
   data() {
     return {
@@ -103,51 +119,22 @@ export default {
         email: '',
         phone_number: '',
       },
-      ticketTypes: [
-        {
-          id: 'type1',
-          price: 199,
-          name: 'General Access — 5 Days Pass',
-          description:
-            'The General Access pass grants you access to the festival for the entire duration of the event. It includes the 189 EUR ticket price and a 10 EUR issuing fee.',
-        },
-        {
-          id: 'type2',
-          price: 329,
-          name: 'VIP Access — 5 Days Pass',
-          description:
-            "The VIP Pass offers 'skip-the-line' access to the festival area, the possibility to watch the show from an elevated VIP platform, the option to reserve a table, separate toilets, and private bars on the VIP platform. It includes the ticket price of 319 EUR lei and a 10 EUR issuing fee.",
-        },
-        {
-          id: 'type3',
-          price: 399,
-          name: 'VIP Access — 5 Days Pass',
-          description:
-            "The 'Backstage Lounge' Pass offers ultra-fast lane access (the quickest access lane in the festival) and the possibility to watch the Main Stage show from the artist-dedicated lounge, alongside your favorite stars! The lounge is an elevated platform with the best view towards the Main Stage, with private bars and dedicated toilets. The pass also offers the option to reserve a table in the Lounge. It includes the 389 EUR ticket price and a 10 EUR issuing fee.",
-        },
-        {
-          id: 'type4',
-          price: 150,
-          name: 'UPGRADE: General Access —> VIP (5 Days Pass)',
-          description:
-            "ATTENTION: THIS IS NOT A TICKET, but an UPGRADE to VIP for participants who have already purchased a General Access (5 Days Pass). Upon festival entry, the participant must present both the General Access ticket and the Upgrade, and the name on both must match the participant's ID. It includes the 140 EUR ticket price and a 10 EUR issuing fee.",
-        },
-        {
-          id: 'type5',
-          price: 220,
-          name: 'UPGRADE: General Access —> Backstage Lounge (5 Days Pass)',
-          description:
-            "ATTENTION: THIS IS NOT A TICKET, but an UPGRADE to Backstage Lounge for participants who have already purchased a General Access (5 Days Pass). Upon festival entry, the participant must present both the General Access ticket and the Upgrade, and the name on both must match the participant's ID. It includes the 210 EUR ticket price and a 10 EUR issuing fee.",
-        },
-        {
-          id: 'type6',
-          price: 70,
-          name: 'UPGRADE: VIP —> Backstage Lounge (5 Days Pass)',
-          description:
-            "ATTENTION: THIS IS NOT A TICKET, but an UPGRADE to Backstage Lounge for participants who have already purchased a VIP (5 Days Pass). Upon festival entry, the participant must present both the VIP ticket and the Upgrade, and the name on both must match the participant's ID. It includes the 60 EUR ticket price and a 10 EUR issuing fee.",
-        },
-      ],
+      isEmailValid: true,
+      isPhoneValid: true,
+      ticketTypes: [],
     };
+  },
+  async mounted() {
+    const ticketSnapshot = await getDocs(collection(db, 'Ticket'));
+    this.ticketTypes = ticketSnapshot.docs.map((doc) => {
+      const data = doc.data();
+      return {
+        id: doc.id,
+        price: data.price,
+        name: data.name,
+        description: data.description,
+      };
+    });
   },
   methods: {
     increment(type) {
@@ -158,17 +145,68 @@ export default {
         this.quantity[type]--;
       }
     },
-    submitForm() {
-      console.log('Form submitted:', this.formData);
+    async submitForm() {
+      if (!this.isEmailValid || !this.isPhoneValid) {
+        console.error('Error: Invalid email or phone number.');
+        return;
+      }
 
-      this.resetForm();
-      this.showForm = false;
+      try {
+        const userRef = await addDoc(collection(db, 'User'), this.formData);
+        console.log('Document written with ID: ', userRef.id);
+
+        const invoiceData = {
+          user_id: userRef.id,
+          tickets: this.selectedTickets,
+          total_price: this.totalPrice,
+          created_at: new Date(),
+        };
+        await addDoc(collection(db, 'Invoice'), invoiceData);
+        console.log('Invoice created successfully.');
+
+        this.resetForm();
+        this.resetTickets();
+        this.showForm = false;
+      } catch (error) {
+        console.error('Error adding document: ', error);
+      }
     },
     resetForm() {
       this.formData.name = '';
       this.formData.surname = '';
       this.formData.email = '';
       this.formData.phone_number = '';
+      this.isEmailValid = true;
+      this.isPhoneValid = true;
+    },
+    resetTickets() {
+      for (let type in this.quantity) {
+        this.quantity[type] = 0;
+      }
+    },
+    async validateEmail() {
+      const usersRef = collection(db, 'User');
+      const queryByEmail = await getDocs(
+        query(usersRef, where('email', '==', this.formData.email))
+      );
+
+      if (!queryByEmail.empty) {
+        this.isEmailValid = false;
+      } else {
+        this.isEmailValid = true;
+      }
+    },
+    async validatePhoneNumber() {
+      const usersRef = collection(db, 'User');
+      const queryByPhone = await getDocs(
+        query(usersRef, where('phone_number', '==', this.formData.phone_number))
+      );
+
+      if (!queryByPhone.empty) {
+        this.isPhoneValid = false;
+      } else {
+        this.isPhoneValid = true;
+      }
     },
     isTicketSelected() {
       return Object.values(this.quantity).some((quantity) => quantity > 0);
