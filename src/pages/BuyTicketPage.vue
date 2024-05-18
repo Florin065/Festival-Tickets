@@ -9,27 +9,32 @@
       <div class="poster-image">
         <img src="~/assets/poster.png" alt="poster" />
       </div>
+
       <div class="info-container">
         <div class="info">
           <p class="name">BEACH, PLEASE! Festival 2024</p>
           <p class="place">Costinești</p>
           <p class="period">10-14 July</p>
         </div>
+
         <div class="tickets">
           <p class="no_tickets">No. Tickets</p>
         </div>
+
         <div v-for="type in ticketTypes" :key="type.id" class="type">
           <div class="type-info">
             <p class="name">{{ type.name }}</p>
             <p class="description">{{ type.description }}</p>
             <p class="price">Price: {{ type.price }} EUR</p>
           </div>
+
           <div class="quantity-control">
             <button @click="decrement(type.id)">-</button>
             <input type="text" :value="quantity[type.id]" readonly />
             <button @click="increment(type.id)">+</button>
           </div>
         </div>
+
         <div class="buy-button">
           <button :disabled="!isTicketSelected()" @click="showForm = true">
             Buy tickets
@@ -50,7 +55,9 @@
                 {{ ticketTypes.find((t) => t.id === type).price }} EUR
               </li>
             </ul>
+
             <p>Total price: {{ totalPrice }} EUR</p>
+
             <label for="name">Name:</label>
             <input type="text" id="name" v-model="formData.name" required />
 
@@ -87,8 +94,8 @@
             >
 
             <div class="button-group">
-              <button type="submit">Submit</button>
-              <button type="button" @click="showForm = false">Close</button>
+              <button>Submit</button>
+              <button @click="showForm = false">Close</button>
             </div>
           </form>
         </div>
@@ -112,39 +119,50 @@ export default {
         type5: 0,
         type6: 0,
       },
+
       showForm: false,
+
       formData: {
         name: '',
         surname: '',
         email: '',
         phone_number: '',
       },
+
       isEmailValid: true,
       isPhoneValid: true,
       ticketTypes: [],
     };
   },
-  async mounted() {
-    const ticketSnapshot = await getDocs(collection(db, 'Ticket'));
-    this.ticketTypes = ticketSnapshot.docs.map((doc) => {
-      const data = doc.data();
-      return {
-        id: doc.id,
-        price: data.price,
-        name: data.name,
-        description: data.description,
-      };
-    });
+
+  async created() {
+    await this.fetchData();
   },
+
   methods: {
+    async fetchData() {
+      const ticketSnapshot = await getDocs(collection(db, 'Ticket'));
+      this.ticketTypes = ticketSnapshot.docs.map((doc) => {
+        const data = doc.data();
+        return {
+          id: doc.id,
+          price: data.price,
+          name: data.name,
+          description: data.description,
+        };
+      });
+    },
+
     increment(type) {
       this.quantity[type]++;
     },
+
     decrement(type) {
       if (this.quantity[type] > 0) {
         this.quantity[type]--;
       }
     },
+
     async submitForm() {
       if (!this.isEmailValid || !this.isPhoneValid) {
         console.error('Error: Invalid email or phone number.');
@@ -159,7 +177,7 @@ export default {
           user_id: userRef.id,
           tickets: this.selectedTickets,
           total_price: this.totalPrice,
-          created_at: new Date(),
+          created_at: new Date().toISOString().slice(0, 16).replace('T', ' '),
         };
         await addDoc(collection(db, 'Invoice'), invoiceData);
         console.log('Invoice created successfully.');
@@ -171,6 +189,7 @@ export default {
         console.error('Error adding document: ', error);
       }
     },
+
     resetForm() {
       this.formData.name = '';
       this.formData.surname = '';
@@ -179,11 +198,13 @@ export default {
       this.isEmailValid = true;
       this.isPhoneValid = true;
     },
+
     resetTickets() {
       for (let type in this.quantity) {
         this.quantity[type] = 0;
       }
     },
+
     async validateEmail() {
       const usersRef = collection(db, 'User');
       const queryByEmail = await getDocs(
@@ -196,6 +217,7 @@ export default {
         this.isEmailValid = true;
       }
     },
+
     async validatePhoneNumber() {
       const usersRef = collection(db, 'User');
       const queryByPhone = await getDocs(
@@ -208,19 +230,22 @@ export default {
         this.isPhoneValid = true;
       }
     },
+
     isTicketSelected() {
-      return Object.values(this.quantity).some((quantity) => quantity > 0);
+      return Object.values(this.quantity).some((_) => _ > 0);
     },
   },
+
   computed: {
     selectedTickets() {
       return this.ticketTypes.reduce((selected, type) => {
-        if (this.quantity[type.id] > 0) {
+        if (this.quantity[type.id] >= 0) {
           selected[type.id] = this.quantity[type.id];
         }
         return selected;
       }, {});
     },
+
     totalPrice() {
       return Object.entries(this.selectedTickets).reduce(
         (total, [type, count]) => {

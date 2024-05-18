@@ -30,65 +30,57 @@
             </div>
             <div class="artist">
               <img src="~assets/WIZKHALIFA.png" alt="WIZ KHALIFA" />
-              <!-- <div class="overlay">WIZ KHALIFA</div> -->
             </div>
           </div>
+
           <div class="artist-row">
             <div class="artist">
               <img src="~assets/YEAT.png" alt="YEAT" />
-              <!-- <div class="overlay">YEAT</div> -->
             </div>
             <div class="artist">
               <img src="~assets/ICESPICE.jpg" alt="ICE SPICE" />
-              <!-- <div class="overlay">ICE SPICE</div> -->
             </div>
             <div class="artist">
               <img src="~assets/DONTOLIVER.jpg" alt="DON TOLIVER" />
-              <!-- <div class="overlay">DON TOLIVER</div> -->
             </div>
           </div>
+
           <div class="artist-row">
             <div class="artist">
               <img src="~assets/NLECHOPPA.jpg" alt="NLE CHOPPA" />
-              <!-- <div class="overlay">NLE CHOPPA</div> -->
             </div>
             <div class="artist">
               <img src="~assets/TRIPPIERED.jpg" alt="TRIPPIE REDD" />
-              <!-- <div class="overlay">TRIPPIE REDD</div> -->
             </div>
             <div class="artist">
               <img src="~assets/CHIEFKEEF.jpg" alt="CHIEF KEEF" />
-              <!-- <div class="overlay">CHIEF KEEF</div> -->
             </div>
           </div>
+
           <div class="artist-row">
             <div class="artist">
               <img src="~assets/RICKROSS.jpg" alt="RICK ROSS" />
-              <!-- <div class="overlay">RICK ROSS</div> -->
             </div>
             <div class="artist">
               <img src="~assets/6IX9INE.jpg" alt="6IX9INE" />
-              <!-- <div class="overlay">6IX9INE</div> -->
             </div>
             <div class="artist">
               <img src="~assets/GUCCIMANE.jpg" alt="GUCCI MANE" />
-              <!-- <div class="overlay">GUCCI MANE</div> -->
             </div>
           </div>
+
           <div class="artist-row">
             <div class="artist">
               <img src="~assets/LILPUMP.jpg" alt="LIL PUMP" />
-              <!-- <div class="overlay">LIL PUMP</div> -->
             </div>
             <div class="artist">
               <img src="~assets/RICHTHEKID.jpg" alt="RICH THE KID" />
-              <!-- <div class="overlay">RICH THE KID</div> -->
             </div>
             <div class="artist">
               <img src="~assets/CITYMORGUE.png" alt="CITY MORGUE" />
-              <!-- <div class="overlay">CITY MORGUE</div> -->
             </div>
           </div>
+
           <h2 class="section-title1">+ MANY MORE TO BE ANNOUNCED</h2>
         </div>
       </div>
@@ -184,10 +176,8 @@
       <iframe
         src="https://open.spotify.com/embed/playlist/3iJBNJPjV1XTaGrj7o2A4V?utm_source=generator"
         width="100%"
-        height="352"
-        frameborder="0"
-        allowfullscreen=""
-        allow="autoplay; clipboard-write; encrypted-media; fullscreen; picture-in-picture"
+        height="155.5"
+        allow="autoplay"
         loading="lazy"
       ></iframe>
     </div>
@@ -259,7 +249,6 @@ export default {
   font-weight: 700;
   padding: 10px 20px;
   text-align: center;
-  text-decoration: none;
   display: inline-block;
   font-size: 16px;
   font-family: 'Roboto', sans-serif;
@@ -293,7 +282,7 @@ export default {
 .video-container {
   position: relative;
   width: 100%;
-  height: 127vh;
+  height: 122vh;
   display: flex;
   justify-content: center;
   align-items: center;
@@ -320,42 +309,6 @@ export default {
   object-fit: cover;
   border: 10px solid green;
   border-radius: 10px;
-}
-
-.buy-now-button1 {
-  background-color: rgb(154, 221, 54);
-  border: none;
-  font-weight: 700;
-  padding: 7px 86px;
-  text-align: center;
-  text-decoration: none;
-  display: inline-block;
-  font-size: 16px;
-  font-family: 'Roboto', sans-serif;
-  transition-duration: 0.4s;
-  cursor: pointer;
-  border-radius: 0px;
-  position: absolute;
-  bottom: 179px;
-  left: 22.75%;
-}
-
-.buy-now-button2 {
-  background-color: rgb(154, 221, 54);
-  border: none;
-  font-weight: 700;
-  padding: 7px 86px;
-  text-align: center;
-  text-decoration: none;
-  display: inline-block;
-  font-size: 16px;
-  font-family: 'Roboto', sans-serif;
-  transition-duration: 0.4s;
-  cursor: pointer;
-  border-radius: 0px;
-  position: absolute;
-  bottom: 145px;
-  left: 41.6%;
 }
 
 .ticket-row {
@@ -435,15 +388,5 @@ export default {
   border-radius: 12px;
   overflow: hidden;
   box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
-}
-
-.overlay {
-  position: absolute;
-  bottom: 0;
-  right: 0;
-  background-color: rgba(0, 0, 0, 0.5);
-  color: #ffffff;
-  padding: 5px 10px;
-  border-radius: 0 0 10px 0;
 }
 </style>

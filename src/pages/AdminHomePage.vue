@@ -3,8 +3,9 @@
     <!-- Invoice Section -->
     <div class="database-section">
       <h1>Invoice List</h1>
-      <button class="add-btn" @click="showInvoiceForm = true">Add</button>
     </div>
+    <button class="add-btn" @click="addInvoiceForm">Add</button>
+
     <!-- Invoice Form -->
     <form v-if="showInvoiceForm" @submit.prevent="submitInvoice" class="form">
       <h2 v-if="!editModeInvoice">Add Invoice</h2>
@@ -22,7 +23,7 @@
         required
       />
       <input type="datetime-local" v-model="invoiceData.created_at" required />
-      <div v-for="(quantity, type) in invoiceData.tickets" :key="type">
+      <div v-for="(_, type) in invoiceData.tickets" :key="type">
         <input
           type="number"
           v-model="invoiceData.tickets[type]"
@@ -33,11 +34,13 @@
         {{ editModeInvoice ? 'Save Changes' : 'Add Invoice' }}
       </button>
     </form>
+
     <!-- Invoice Table -->
     <div class="table-container">
       <table>
         <thead>
           <tr>
+            <th>ID</th>
             <th>User ID</th>
             <th>Total Price</th>
             <th>Created At</th>
@@ -47,6 +50,7 @@
         </thead>
         <tbody>
           <tr v-for="invoice in invoices" :key="invoice.id">
+            <td>{{ invoice.id }}</td>
             <td>{{ invoice.user_id }}</td>
             <td>{{ invoice.total_price }}</td>
             <td>{{ invoice.created_at }}</td>
@@ -73,8 +77,9 @@
     <!-- User Section -->
     <div class="database-section">
       <h1>User List</h1>
-      <button class="add-btn" @click="showUserForm = true">Add</button>
     </div>
+    <button class="add-btn" @click="addUserForm">Add</button>
+
     <!-- User Form -->
     <form v-if="showUserForm" @submit.prevent="submitUser" class="form">
       <h2 v-if="!editModeUser">Add User</h2>
@@ -102,11 +107,13 @@
         {{ editModeUser ? 'Save Changes' : 'Add User' }}
       </button>
     </form>
+
     <!-- User Table -->
     <div class="table-container">
       <table>
         <thead>
           <tr>
+            <th>ID</th>
             <th>Name</th>
             <th>Surname</th>
             <th>Email</th>
@@ -116,6 +123,7 @@
         </thead>
         <tbody>
           <tr v-for="user in users" :key="user.id">
+            <td>{{ user.id }}</td>
             <td>{{ user.name }}</td>
             <td>{{ user.surname }}</td>
             <td>{{ user.email }}</td>
@@ -134,8 +142,9 @@
     <!-- Ticket Section -->
     <div class="database-section">
       <h1>Ticket List</h1>
-      <button class="add-btn" @click="showTicketForm = true">Add</button>
     </div>
+    <button class="add-btn" @click="addTicketForm">Add</button>
+
     <!-- Ticket Form -->
     <form v-if="showTicketForm" @submit.prevent="submitTicket" class="form">
       <h2 v-if="!editModeTicket">Add Ticket</h2>
@@ -162,11 +171,13 @@
         {{ editModeTicket ? 'Save Changes' : 'Add Ticket' }}
       </button>
     </form>
+
     <!-- Ticket Table -->
     <div class="table-container">
       <table>
         <thead>
           <tr>
+            <th>ID</th>
             <th>Name</th>
             <th>Price</th>
             <th>Description</th>
@@ -175,6 +186,7 @@
         </thead>
         <tbody>
           <tr v-for="ticket in tickets" :key="ticket.id">
+            <td>{{ ticket.id }}</td>
             <td>{{ ticket.name }}</td>
             <td>{{ ticket.price }}</td>
             <td>{{ ticket.description }}</td>
@@ -205,50 +217,54 @@ import {
 export default {
   data() {
     return {
-      invoices: [], // Stores the list of invoices
+      invoices: [],
       invoiceData: {
         user_id: '',
         total_price: '',
         created_at: '',
         tickets: {
-          type1: '',
-          type2: '',
-          type3: '',
-          type4: '',
-          type5: '',
-          type6: '',
+          type1: 0,
+          type2: 0,
+          type3: 0,
+          type4: 0,
+          type5: 0,
+          type6: 0,
         },
       },
+
       editModeInvoice: false, // Tracks if in edit mode for invoices
       editIdInvoice: null, // ID of the invoice being edited
       showInvoiceForm: false, // Controls visibility of the invoice form
 
-      users: [], // Stores the list of users
+      users: [],
       userData: {
         name: '',
         surname: '',
         email: '',
         phone_number: '',
       },
+
       editModeUser: false, // Tracks if in edit mode for users
       editIdUser: null, // ID of the user being edited
       showUserForm: false, // Controls visibility of the user form
 
-      tickets: [], // Stores the list of tickets
+      tickets: [],
       ticketData: {
         name: '',
         price: '',
         description: '',
       },
+
       editModeTicket: false, // Tracks if in edit mode for tickets
       editIdTicket: null, // ID of the ticket being edited
       showTicketForm: false, // Controls visibility of the ticket form
     };
   },
+
   async created() {
-    // Fetch initial data when component is created
     await this.fetchData();
   },
+
   methods: {
     async fetchData() {
       // Fetches data for invoices, users, and tickets from Firestore
@@ -270,18 +286,25 @@ export default {
         ...doc.data(),
       }));
     },
+
     async submitInvoice() {
-      // Filter out ticket types with empty quantities
-      const filteredTickets = Object.fromEntries(
-        Object.entries(this.invoiceData.tickets).filter(
-          ([, quantity]) => quantity
-        )
+      // Check if the user exists
+      const userExists = this.users.some(
+        (user) => user.id === this.invoiceData.user_id
       );
+      if (!userExists) {
+        alert('User does not exist. Please enter a valid User ID.');
+        return;
+      }
 
       // Create a new invoice object with filtered tickets
       const newInvoiceData = {
         ...this.invoiceData,
-        tickets: filteredTickets,
+        tickets: this.invoiceData.tickets,
+        created_at: new Date(this.invoiceData.created_at)
+          .toISOString()
+          .slice(0, 16) // Format: YYYY-MM-DD HH:MM
+          .replace('T', ' '), // Replace 'T' with a space
       };
 
       // Adds or updates an invoice in Firestore
@@ -293,21 +316,30 @@ export default {
         this.editIdInvoice = null;
       }
       this.resetInvoiceForm();
-      this.showInvoiceForm = false;
+      this.showInvoiceForm = false; // Ascunde formularul după ce datele sunt trimise și formularul este resetat
       await this.fetchData();
     },
+
     editInvoice(invoice) {
       // Populates the form with the selected invoice data for editing
       this.invoiceData = { ...invoice };
       this.editModeInvoice = true;
       this.editIdInvoice = invoice.id;
-      this.showInvoiceForm = true;
+      // Dacă formularul este deja afișat, îl închide
+      if (!this.showInvoiceForm) {
+        this.showInvoiceForm = true;
+      } else {
+        this.showInvoiceForm = false;
+        this.editModeInvoice = false;
+      }
     },
+
     async deleteInvoice(id) {
       // Deletes the selected invoice from Firestore
       await deleteDoc(doc(db, 'Invoice', id));
       await this.fetchData();
     },
+
     resetInvoiceForm() {
       // Resets the invoice form fields
       this.invoiceData = {
@@ -315,15 +347,16 @@ export default {
         total_price: '',
         created_at: '',
         tickets: {
-          type1: '',
-          type2: '',
-          type3: '',
-          type4: '',
-          type5: '',
-          type6: '',
+          type1: 0,
+          type2: 0,
+          type3: 0,
+          type4: 0,
+          type5: 0,
+          type6: 0,
         },
       };
     },
+
     async submitUser() {
       // Adds or updates a user in Firestore
       if (!this.editModeUser) {
@@ -337,18 +370,27 @@ export default {
       this.showUserForm = false;
       await this.fetchData();
     },
+
     editUser(user) {
       // Populates the form with the selected user data for editing
       this.userData = { ...user };
       this.editModeUser = true;
       this.editIdUser = user.id;
-      this.showUserForm = true;
+      // Dacă formularul este deja afișat, îl închide
+      if (!this.showUserForm) {
+        this.showUserForm = true;
+      } else {
+        this.showUserForm = false;
+        this.editModeUser = false;
+      }
     },
+
     async deleteUser(id) {
       // Deletes the selected user from Firestore
       await deleteDoc(doc(db, 'User', id));
       await this.fetchData();
     },
+
     resetUserForm() {
       // Resets the user form fields
       this.userData = {
@@ -358,6 +400,7 @@ export default {
         phone_number: '',
       };
     },
+
     async submitTicket() {
       // Adds or updates a ticket in Firestore
       if (!this.editModeTicket) {
@@ -371,18 +414,27 @@ export default {
       this.showTicketForm = false;
       await this.fetchData();
     },
+
     editTicket(ticket) {
       // Populates the form with the selected ticket data for editing
       this.ticketData = { ...ticket };
       this.editModeTicket = true;
       this.editIdTicket = ticket.id;
-      this.showTicketForm = true;
+      // Dacă formularul este deja afișat, îl închide
+      if (!this.showTicketForm) {
+        this.showTicketForm = true;
+      } else {
+        this.showTicketForm = false;
+        this.editModeTicket = false;
+      }
     },
+
     async deleteTicket(id) {
       // Deletes the selected ticket from Firestore
       await deleteDoc(doc(db, 'Ticket', id));
       await this.fetchData();
     },
+
     resetTicketForm() {
       // Resets the ticket form fields
       this.ticketData = {
@@ -390,6 +442,36 @@ export default {
         price: '',
         description: '',
       };
+    },
+
+    addInvoiceForm() {
+      // Reset form data before showing it
+      if (this.showInvoiceForm) {
+        this.showInvoiceForm = false;
+      } else {
+        this.resetInvoiceForm();
+        this.showInvoiceForm = true;
+      }
+    },
+
+    addUserForm() {
+      // Reset form data before showing it
+      if (this.showUserForm) {
+        this.showUserForm = false;
+      } else {
+        this.resetUserForm();
+        this.showUserForm = true;
+      }
+    },
+
+    addTicketForm() {
+      // Reset form data before showing it
+      if (this.showTicketForm) {
+        this.showTicketForm = false;
+      } else {
+        this.resetTicketForm();
+        this.showTicketForm = true;
+      }
     },
   },
 };
