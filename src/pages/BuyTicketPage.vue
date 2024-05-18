@@ -211,11 +211,7 @@ export default {
         query(usersRef, where('email', '==', this.formData.email))
       );
 
-      if (!queryByEmail.empty) {
-        this.isEmailValid = false;
-      } else {
-        this.isEmailValid = true;
-      }
+      this.isEmailValid = queryByEmail.empty;
     },
 
     async validatePhoneNumber() {
@@ -224,11 +220,7 @@ export default {
         query(usersRef, where('phone_number', '==', this.formData.phone_number))
       );
 
-      if (!queryByPhone.empty) {
-        this.isPhoneValid = false;
-      } else {
-        this.isPhoneValid = true;
-      }
+      this.isPhoneValid = queryByPhone.empty;
     },
 
     isTicketSelected() {

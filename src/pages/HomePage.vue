@@ -5,14 +5,16 @@
         <img src="~/assets/BEACHPLEASE.png" alt="Logo" class="logo" />
       </router-link>
       <router-link to="/buy">
-        <button class="buy-tickets-button">TICKETS</button>
+        <q-btn class="buy-tickets-button" @click="redirectToBuyTicketPage"
+          >TICKETS</q-btn
+        >
       </router-link>
     </div>
     <q-container class="q-pa-md">
       <div class="video-container">
         <video autoplay loop muted>
           <source
-            src="~assets/BEACH, PLEASE! 2024 — Official Date Announcement.mp4"
+            src="~/assets/BEACH, PLEASE! 2024 — Official Date Announcement.mp4"
             type="video/mp4"
           />
         </video>
@@ -87,6 +89,8 @@
 
       <div class="ticket-row">
         <div
+          v-for="(ticket, index) in tickets"
+          :key="index"
           class="ticket-container"
           @click="redirectToBuyTicketPage"
           @mouseover="zoomOut"
@@ -95,77 +99,15 @@
           <div class="ticket">
             <img
               src="~/assets/BEACHPLEASE.png"
-              alt="BEACHPLEASE"
+              :alt="ticket.name"
               class="ticket-image"
             />
             <div class="ticket-details">
-              <p class="ticket-name">General Access</p>
-              <p class="ticket-price">$199</p>
-              <p class="ticket-description">
-                The General Access pass grants you access to the festival for
-                the entire duration of the event.
-              </p>
+              <p class="ticket-name">{{ ticket.name }}</p>
+              <p class="ticket-price">{{ ticket.price }}</p>
+              <p class="ticket-description">{{ ticket.description }}</p>
               <router-link to="/buy">
-                <button class="buy-now-button">BUY NOW</button>
-              </router-link>
-            </div>
-          </div>
-        </div>
-
-        <div
-          class="ticket-container"
-          @click="redirectToBuyTicketPage"
-          @mouseover="zoomOut"
-          @mouseleave="resetZoom"
-        >
-          <div class="ticket">
-            <img
-              src="~/assets/BEACHPLEASE.png"
-              alt="BEACHPLEASE"
-              class="ticket-image"
-            />
-            <div class="ticket-details">
-              <p class="ticket-name">VIP Pass</p>
-              <p class="ticket-price">$329</p>
-              <p class="ticket-description">
-                The VIP Pass offers “skip-the-line” access to the festival area,
-                the possibility to watch the show from an elevated VIP platform,
-                the option to reserve a table, separate toilets, and private
-                bars on the VIP platform.
-              </p>
-              <router-link to="/buy">
-                <button class="buy-now-button">BUY NOW</button>
-              </router-link>
-            </div>
-          </div>
-        </div>
-
-        <div
-          class="ticket-container"
-          @click="redirectToBuyTicketPage"
-          @mouseover="zoomOut"
-          @mouseleave="resetZoom"
-        >
-          <div class="ticket">
-            <img
-              src="~/assets/BEACHPLEASE.png"
-              alt="BEACHPLEASE"
-              class="ticket-image"
-            />
-            <div class="ticket-details">
-              <p class="ticket-name">Backstage Lounge Pass</p>
-              <p class="ticket-price">$399</p>
-              <p class="ticket-description">
-                The “Backstage Lounge” Pass offers ultra-fast lane access (the
-                quickest access lane in the festival) and the possibility to
-                watch the Main Stage show from the artist-dedicated lounge,
-                alongside your favorite stars! The lounge is an elevated
-                platform with the best view towards the Main Stage, with private
-                bars and dedicated toilets. The pass also offers the option to
-                reserve a table in the Lounge.
-              </p>
-              <router-link to="/buy">
-                <button class="buy-now-button">BUY NOW</button>
+                <q-btn class="buy-now-button">BUY NOW</q-btn>
               </router-link>
             </div>
           </div>
@@ -184,21 +126,44 @@
   </q-page>
 </template>
 
-<script>
-export default {
-  name: 'HomePage',
-  methods: {
-    redirectToBuyTicketPage() {
-      this.$router.push('/buy');
-    },
-    zoomOut(event) {
-      event.currentTarget.style.transform = 'scale(1.05)';
-    },
-    resetZoom(event) {
-      event.currentTarget.style.transform = 'scale(1)';
-    },
-  },
+<script setup lang="ts">
+import { ref } from 'vue';
+import { useRouter } from 'vue-router';
+
+const router = useRouter();
+
+const redirectToBuyTicketPage = () => {
+  router.push('/buy');
 };
+
+const zoomOut = (event: MouseEvent) => {
+  (event.currentTarget as HTMLElement).style.transform = 'scale(1.05)';
+};
+
+const resetZoom = (event: MouseEvent) => {
+  (event.currentTarget as HTMLElement).style.transform = 'scale(1)';
+};
+
+const tickets = ref([
+  {
+    name: 'General Access',
+    price: '$199',
+    description:
+      'The General Access pass grants you access to the festival for the entire duration of the event.',
+  },
+  {
+    name: 'VIP Pass',
+    price: '$329',
+    description:
+      'The VIP Pass offers “skip-the-line” access to the festival area, the possibility to watch the show from an elevated VIP platform, the option to reserve a table, separate toilets, and private bars on the VIP platform.',
+  },
+  {
+    name: 'Backstage Lounge Pass',
+    price: '$399',
+    description:
+      'The “Backstage Lounge” Pass offers ultra-fast lane access (the quickest access lane in the festival) and the possibility to watch the Main Stage show from the artist-dedicated lounge, alongside your favorite stars! The lounge is an elevated platform with the best view towards the Main Stage, with private bars and dedicated toilets. The pass also offers the option to reserve a table in the Lounge.',
+  },
+]);
 </script>
 
 <style scoped>
@@ -282,7 +247,7 @@ export default {
 .video-container {
   position: relative;
   width: 100%;
-  height: 122vh;
+  height: 128vh;
   display: flex;
   justify-content: center;
   align-items: center;
