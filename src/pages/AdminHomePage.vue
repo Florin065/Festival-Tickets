@@ -315,8 +315,9 @@ export default {
         this.editModeInvoice = false;
         this.editIdInvoice = null;
       }
+
       this.resetInvoiceForm();
-      this.showInvoiceForm = false; // Ascunde formularul după ce datele sunt trimise și formularul este resetat
+      this.showInvoiceForm = false;
       await this.fetchData();
     },
 
@@ -325,7 +326,7 @@ export default {
       this.invoiceData = { ...invoice };
       this.editModeInvoice = true;
       this.editIdInvoice = invoice.id;
-      // Dacă formularul este deja afișat, îl închide
+
       if (!this.showInvoiceForm) {
         this.showInvoiceForm = true;
       } else {
@@ -366,17 +367,17 @@ export default {
         this.editModeUser = false;
         this.editIdUser = null;
       }
+
       this.resetUserForm();
       this.showUserForm = false;
       await this.fetchData();
     },
 
     editUser(user) {
-      // Populates the form with the selected user data for editing
       this.userData = { ...user };
       this.editModeUser = true;
       this.editIdUser = user.id;
-      // Dacă formularul este deja afișat, îl închide
+
       if (!this.showUserForm) {
         this.showUserForm = true;
       } else {
@@ -386,7 +387,6 @@ export default {
     },
 
     async deleteUser(id) {
-      // Deletes the selected user from Firestore
       await deleteDoc(doc(db, 'User', id));
       await this.fetchData();
     },
@@ -410,6 +410,7 @@ export default {
         this.editModeTicket = false;
         this.editIdTicket = null;
       }
+
       this.resetTicketForm();
       this.showTicketForm = false;
       await this.fetchData();
@@ -420,7 +421,7 @@ export default {
       this.ticketData = { ...ticket };
       this.editModeTicket = true;
       this.editIdTicket = ticket.id;
-      // Dacă formularul este deja afișat, îl închide
+
       if (!this.showTicketForm) {
         this.showTicketForm = true;
       } else {
